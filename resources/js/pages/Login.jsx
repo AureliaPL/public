@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useLocation} from "react-router-dom";
+import {Redirect, useHistory, useLocation} from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
     let [info, setInfo] = useState([])
     let [isFetched, setFetch] = useState(false)
+	let [redirect, setRedirect] = useState(false)
 
 	const params = useLocation().search
 	const code = new URLSearchParams(params).get('code')
@@ -30,8 +31,13 @@ const Login = () => {
 		}).
 		then((res) => {
 			setInfo(res.data.member)
-			localStorage.setItem("username", info.login)
+			localStorage.setItem("username", res.data.member.login)
 			setFetch(true)
+		})
+		.finally(() => {
+			setTimeout(function() {
+				setRedirect(true)
+			}.bind(this), 3000)
 		})
 	})
 
@@ -42,14 +48,20 @@ const Login = () => {
 
 	return (
 		<section className="section">
-			<div className="container">
-				<h1 className="title">
-					Bienvenue { isFetched ? info.login : "" }
-				</h1>
-				<p className="subtitle">
-					My first website with <strong>Bulma</strong>!
-				</p>
-			</div>
+			{ isFetched ?
+				<div className="container">
+					<h1 className="title">
+						Bienvenue {info.login}
+					</h1>
+				</div>
+			: 
+				""
+			}
+			{!redirect ?
+				""
+			:
+				<Redirect to="/"/>
+			}
 		</section>
 	);
 };
