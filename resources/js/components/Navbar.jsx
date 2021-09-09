@@ -28,7 +28,7 @@ const Navbar = () => {
                     <Link to="/" className="navbar-item has-text-white">Test</Link>
                 </div>
                 <div className="navbar-end">
-                    <Link to="/" className="button navbar-item">Login</Link>
+                    <a href="https://www.betaseries.com/authorize?client_id=27e640f20736&redirect_uri=http://localhost:8000/login" className="button navbar-item">Login</a>
                 </div>
             </div>
         </nav>
