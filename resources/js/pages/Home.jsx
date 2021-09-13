@@ -1,22 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import axios from "axios";
+import ShowCard from '../components/ShowCard';
 
 const Home = () => {
-    let [user_info, setUserInfo] = useState([])
+    let [shows, setShows] = useState([])
     let [isFetched, setFetch] = useState(false)
 	const id = localStorage.getItem("token")
 	const user = localStorage.getItem("username")
 
-	const fetchData = async () => await axios.get('https://api.betaseries.com/members/infos', {
+	const fetchData = async () => await axios.get('https://api.betaseries.com/shows/list?limit=50&order=popularity', {
 		"headers": {
 			"X-BetaSeries-Key": "27e640f20736",
 			"Authorization": `Bearer ${id}`,
 			"Accept": "application/json"
-		}
+		},
 	}).
 	then((res) => {
-		setUserInfo(res.data)
+		setShows(res.data.shows)
 		setFetch(true)
 	})
 
@@ -29,9 +30,19 @@ const Home = () => {
 		<section className="section">
 			<div className="container">
 				{localStorage.token ?
-					<h1 className="title">
-						Accueil {localStorage.token}
-					</h1>
+					<>
+						<center>
+							<h1 className="title">
+								Accueil
+							</h1>
+							<hr className="has-background-danger-dark" />
+							{isFetched &&
+							shows.map((show) => (
+								<ShowCard key={show.id} show={show}/>
+							))
+							}
+						</center>
+					</>
 				:
 					<>
 						<h1 className="title">Vous n'êtes pas connecté.e</h1>
