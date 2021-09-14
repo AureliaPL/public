@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import axios from "axios";
 
 const ShowCard = (props) => {
     let [hasShow, setShow] = useState(false);
 	const id = localStorage.getItem("token")
+
+    const show = async () => {
+        if(props.show.user.next.id) {
+            setShow(true);
+        }
+    }
+
 	const addShow = async (idShow) => await axios.post(`https://api.betaseries.com/shows/show`, {
         'id': idShow
     }, {
@@ -17,6 +24,7 @@ const ShowCard = (props) => {
     .then(() => {
         setShow(true);
     })
+
 	const rmShow = async (idShow) => await axios.delete(`https://api.betaseries.com/shows/show?id=${idShow}`, {
 		"headers": {
 			"X-BetaSeries-Key": "27e640f20736",
@@ -28,6 +36,9 @@ const ShowCard = (props) => {
         setShow(false);
     })
 
+    useEffect(() => {
+        show();
+    }, [])
 
     return(
         <div style={{width: "280px", display: "inline-flex"}}>

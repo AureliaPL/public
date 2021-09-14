@@ -36,10 +36,12 @@ const Home = () => {
 								Accueil
 							</h1>
 							<hr className="has-background-danger-dark" />
-							{isFetched &&
-							shows.map((show) => (
-								<ShowCard key={show.id} show={show}/>
-							))
+							{isFetched ?
+								shows.map((show) => (
+									<ShowCard key={show.id} show={show}/>
+								))
+							:
+								<h1>Loading...</h1>
 							}
 						</center>
 					</>
