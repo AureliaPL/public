@@ -5,6 +5,7 @@ import axios from "axios";
 const Navbar = () => {
     let [isActive, setisActive] = useState(false);
     let [isFetched, setFetch] = useState(false);
+    let [user, setUser] = useState([]);
 
     let id = localStorage.getItem("token");
 
@@ -15,14 +16,14 @@ const Navbar = () => {
 			"Accept": "application/json"
 		}
 	})
-    .then(() => {
-		setFetch(true)
+    .then((res) => {
+        setUser(res.data.member);
+		setFetch(true);
 	})
 
     useEffect(() => {
-        fetchData()
-        // eslint-disable-next-line
-    }, [localStorage.getItem('token')])
+        fetchData();
+    }, [localStorage.token])
 
     return(
         <nav className="navbar has-background-danger-dark">
@@ -44,30 +45,47 @@ const Navbar = () => {
                 </a>
             </div>
             <div id="navbarBasicExample" className={`navbar-menu has-background-danger-dark ${isActive ? "is-active" : ""}`}>
-                <div className="navbar-start">
+                <div className="navbar-start ml-4">
                     <Link
                         to="/"
-                        className="navbar-item has-text-white"
+                        className="navbar-item has-background-danger-dark has-text-white"
                         onClick={() => {
                         setisActive(!isActive);
                         }}>
-                        Test
+                        Accueil
+                    </Link>
+                    <Link
+                        to="/friends"
+                        className="navbar-item has-background-danger-dark has-text-white"
+                        onClick={() => {
+                        setisActive(!isActive);
+                        }}>
+                        Amis
                     </Link>
                 </div>
-                <div className="navbar-end">
+                <div className="navbar-end m-4">
+                    <Link
+                        to={`/user/${user.id}`}
+                        onClick={() => {
+                        setisActive(!isActive);
+                        }}
+                        className="navbar-item has-background-danger-dark has-text-white m-1">
+                        {localStorage.username}
+                    </Link>
                     {isFetched ?
                         <Link
                             to="/" 
                             onClick={() => {
                             localStorage.removeItem('token');
+                            localStorage.removeItem('username');
                             setFetch(false);
                             setisActive(!isActive);
                             }}
-                            className="button navbar-item">
+                            className="button navbar-item m-1">
                             Logout
                         </Link>
                     :
-                        <a href="https://www.betaseries.com/authorize?client_id=27e640f20736&redirect_uri=http://localhost:8000/login" className="button navbar-item">Login</a>
+                        <a href="https://www.betaseries.com/authorize?client_id=27e640f20736&redirect_uri=http://localhost:8000/login" className="button navbar-item m-1">Login</a>
                     }
                 </div>
             </div>

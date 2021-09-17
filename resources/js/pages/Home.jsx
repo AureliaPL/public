@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from "react-router-dom";
 import axios from "axios";
 import ShowCard from '../components/ShowCard';
 
@@ -23,7 +22,6 @@ const Home = () => {
 
     useEffect(() => {
         fetchData()
-        // eslint-disable-next-line
     }, [])
 
 	return (
@@ -41,7 +39,7 @@ const Home = () => {
 									<ShowCard key={show.id} show={show}/>
 								))
 							:
-								<h1>Loading...</h1>
+								<progress className="progress is-danger" >Loading...</progress>
 							}
 						</center>
 					</>
